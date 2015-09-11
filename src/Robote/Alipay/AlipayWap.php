@@ -1,57 +1,32 @@
 <?php
-namespace Robote\Alipay\Wap;
+namespace Robote\Alipay;
 
 class AlipayWap
 {
-
-    private $partner;
-
-    private $notify_url;
-
-    private $return_url;
 
     private $_input_charset = 'UTF-8';
 
     protected $config;
 
-    public function __construct($config)
+    public function __construct($app)
     {
-        $this->config = $config;
+        $this->config = $app->config->get('robote-alipay-wap');
     }
 
 
-    public function setPartner($partner)
+    public function payment($order_id, $amount, $show_url, $subject = '', $body = '', $it_b_pay = '' , $extern_token = '')
     {
-        $this->partner = $partner;
-        return $this;
-    }
-
-    public function setNotifyUrl($notify_url)
-    {
-        $this->notify_url = $notify_url;
-        return $this;
-    }
-
-    public function setReturnUrl($return_url)
-    {
-        $this->return_url = $return_url;
-        return $this;
-    }
-
-
-    public function payment($order_id, $amount, $notify_url, $call_back_url, $subject = '',$body = '' , $it_b_pay = '' , $extern_token = '')
-    {
-        require_once("lib/lib/alipay_submit.class.php");
+        require_once("lib/alipay_submit.class.php");
 
         //支付类型
         $payment_type = "1";
         //必填，不能修改
         //服务器异步通知页面路径
-        $notify_url = $this->notify_url;
+        $notify_url = $this->config['notify_url'];
         //需http://格式的完整路径，不能加?id=123这类自定义参数
 
         //页面跳转同步通知页面路径
-        $return_url = $this->return_url;
+        $return_url = $this->config['return_url'];
         //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
 
         //商户订单号
@@ -59,7 +34,7 @@ class AlipayWap
         //商户网站订单系统中唯一订单号，必填
 
         //订单名称
-        $subject = "购买商品";
+        $subject = $subject;
         //必填
 
         //付款金额
@@ -67,7 +42,7 @@ class AlipayWap
         //必填
 
         //商品展示地址
-        $show_url = $call_back_url;
+        $show_url = $show_url;
         //必填，需以http://开头的完整路径，例如：http://www.商户网址.com/myorder.html
 
         //订单描述
@@ -82,14 +57,13 @@ class AlipayWap
         $extern_token = $extern_token;
         //选填
 
-
         /************************************************************/
 
         //构造要请求的参数数组，无需改动
         $parameter = array(
             "service" => "alipay.wap.create.direct.pay.by.user",
-            "partner" => $this->partner,
-            "seller_id" => $this->partner,
+            "partner" => $this->config['partner'],
+            "seller_id" => $this->config['partner'],
             "payment_type"	=> $payment_type,
             "notify_url"	=> $notify_url,
             "return_url"	=> $return_url,
@@ -108,4 +82,6 @@ class AlipayWap
         $html_text = $alipaySubmit->buildRequestForm($parameter,"get", "确认");
         echo $html_text;
     }
+
+
 }

@@ -1,12 +1,12 @@
 Alipay
 ======
 
-Alipay SDK for Laravel5
+Alipay 移动支付 for Laravel5
 
 ## 安装
 
 ```
-composer require robote/alipay dev-master
+composer require "robote/alipay": "dev-master"
 ```
 
 更新你的依赖包 ```composer update``` 或者全新安装 ```composer install```。
@@ -26,24 +26,22 @@ composer require robote/alipay dev-master
 
 运行 `php artisan vendor:publish` 命令，发布配置文件到你的项目中。
 
-配置文件 `config/latrell-alipay.php` 为公共配置信息文件， `config/latrell-alipay-web.php` 为Web版支付宝SDK配置， `config/latrell-alipay-mobile.php` 为手机端支付宝SDK配置。
+配置文件  `config/robote-alipay-wap.php` 为移动版支付宝配置， `config/robote-alipay-mobile.php` 为手机端支付宝配置。
+
+在`config` 文件夹中新增 `robote-alipay` 文件夹，在该文件夹下放入  rsa_private_key.pem ,alipay_public_key.pem 两个文件
 
 ## 例子
 
 ### 支付申请
 
-#### 网页
+#### 手机网页
 
 ```php
 	// 创建支付单。
 	$alipay = app('alipay.web');
-	$alipay->setOutTradeNo('order_id');
-	$alipay->setTotalFee('order_price');
-	$alipay->setSubject('goods_name');
-	$alipay->setBody('goods_description');
 
 	// 跳转到支付页面。
-	return redirect()->to($alipay->getPayLink());
+    return $alipay->payment($order_id,$amount,$show_url, $subject,$content);
 ```
 
 

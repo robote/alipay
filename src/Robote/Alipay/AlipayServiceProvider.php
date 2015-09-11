@@ -12,8 +12,8 @@ class AlipayServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__ . '/../../config/config.php' => config_path('robote-alipay-mobile.php'),
-			__DIR__ . '/../../config/config.php' => config_path('robote-alipay-wap.php'),
+			__DIR__ . '/../../config/config-mobile.php' => config_path('robote-alipay-mobile.php'),
+			__DIR__ . '/../../config/config-wap.php' => config_path('robote-alipay-wap.php'),
 		]);
 	}
 
@@ -35,11 +35,7 @@ class AlipayServiceProvider extends ServiceProvider
 
 		$this->app->bind('alipay.wap', function ($app)
 		{
-            $alipay = new AlipayWap();
-
-            $alipay->setPartner($app->config->get('robote-alipay-wap.partner_id'))
-                ->setSellerId($app->config->get('robote-alipay-wap.seller_id'))
-                ->setNotifyUrl($app->config->get('robote-alipay-wap.notify_url'));
+            $alipay = new AlipayWap($app);
 
 			return $alipay;
 		});
