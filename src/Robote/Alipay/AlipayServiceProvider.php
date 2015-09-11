@@ -12,8 +12,8 @@ class AlipayServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__ . '/../../config/config.php' => config_path('robote-alipay.php'),
-			__DIR__ . '/../../config/web.php' => config_path('robote-alipay-web.php')
+			__DIR__ . '/../../config/config.php' => config_path('robote-alipay-mobile.php'),
+			__DIR__ . '/../../config/config.php' => config_path('robote-alipay-wap.php'),
 		]);
 	}
 
@@ -24,35 +24,22 @@ class AlipayServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->mergeConfigFrom(__DIR__ . '/../../config/config.php', 'latrell-alipay');
-		$this->mergeConfigFrom(__DIR__ . '/../../config/mobile.php', 'latrell-alipay-mobile');
-		$this->mergeConfigFrom(__DIR__ . '/../../config/web.php', 'latrell-alipay-web');
+		$this->mergeConfigFrom(__DIR__ . '/../../config/config-mobile.php', 'robote-alipay-mobile');
+		$this->mergeConfigFrom(__DIR__ . '/../../config/config-wap.php', 'robote-alipay-wap');
 
 		$this->app->bind('alipay.mobile', function ($app)
 		{
-			$alipay = new Mobile\SdkPayment();
-
-			$alipay->setPartner($app->config->get('latrell-alipay.partner_id'))
-				->setSellerId($app->config->get('latrell-alipay.seller_id'))
-				->setSignType($app->config->get('latrell-alipay-mobile.sign_type'))
-				->setPrivateKeyPath($app->config->get('latrell-alipay-mobile.private_key_path'))
-				->setPublicKeyPath($app->config->get('latrell-alipay-mobile.public_key_path'))
-				->setNotifyUrl($app->config->get('latrell-alipay-mobile.notify_url'));
-
+            $alipay = new AlipayMobile();
 			return $alipay;
 		});
 
-		$this->app->bind('alipay.web', function ($app)
+		$this->app->bind('alipay.wap', function ($app)
 		{
-			$alipay = new Web\SdkPayment();
+            $alipay = new AlipayWap();
 
-			$alipay->setPartner($app->config->get('latrell-alipay.partner_id'))
-				->setSellerId($app->config->get('latrell-alipay.seller_id'))
-				->setKey($app->config->get('latrell-alipay-web.key'))
-				->setSignType($app->config->get('latrell-alipay-web.sign_type'))
-				->setNotifyUrl($app->config->get('latrell-alipay-web.notify_url'))
-				->setReturnUrl($app->config->get('latrell-alipay-web.return_url'))
-				->setExterInvokeIp($app->request->getClientIp());
+            $alipay->setPartner($app->config->get('robote-alipay-wap.partner_id'))
+                ->setSellerId($app->config->get('robote-alipay-wap.seller_id'))
+                ->setNotifyUrl($app->config->get('robote-alipay-wap.notify_url'));
 
 			return $alipay;
 		});
@@ -67,7 +54,7 @@ class AlipayServiceProvider extends ServiceProvider
 	{
 		return [
 			'alipay.mobile',
-			'alipay.web'
+			'alipay.wap'
 		];
 	}
 }
