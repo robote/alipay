@@ -2,10 +2,10 @@
 return [
 
     // 合作身份者id，以2088开头的16位纯数字
-    'partner' => '',
+    'partner' => '**************',
 
     //收款支付宝账号，跟partner一样的值
-    'seller_id'	=> '',
+    'seller_id'	=> '**************',
 
     /// 商户的私钥（后缀是.pen）文件相对路径
     'private_key_path' => config_path('robote-alipay/rsa_private_key.pem'),

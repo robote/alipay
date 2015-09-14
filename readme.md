@@ -40,8 +40,8 @@ composer require "robote/alipay": "dev-master"
 	// 创建支付单。
 	$alipay = app('alipay.web');
 
-	// 跳转到支付页面。
-    return $alipay->payment($order_id,$amount,$show_url, $subject,$content);
+	// 跳转到支付页面。其中 $show_url,$subject,$body 三个参数可为空
+    return $alipay->payment($order_id,$amount,$show_url,$subject,$body);
 ```
 
 
@@ -68,10 +68,7 @@ composer require "robote/alipay": "dev-master"
 			case 'TRADE_SUCCESS':
 			case 'TRADE_FINISHED':
 				// TODO: 支付成功，取得订单号进行其它相关操作。
-				Log::debug('Alipay notify post data verification success.', [
-					'out_trade_no' => Input::get('out_trade_no'),
-					'trade_no' => Input::get('trade_no')
-				]);
+
 				break;
 		}
 	
@@ -96,10 +93,7 @@ composer require "robote/alipay": "dev-master"
 			case 'TRADE_SUCCESS':
 			case 'TRADE_FINISHED':
 				// TODO: 支付成功，取得订单号进行其它相关操作。
-				Log::debug('Alipay notify get data verification success.', [
-					'out_trade_no' => Input::get('out_trade_no'),
-					'trade_no' => Input::get('trade_no')
-				]);
+
 				break;
 		}
 
